@@ -137,13 +137,18 @@ void TEST_DECREASE_KEY() {
 
 };
 
-int main() {
+void EXPENSIVE_TEST() {
 	TEST_INSERT_ELEMENTS();
 	TEST_SIZE();
 	TEST_ASK_MINIMUM();
 	TEST_EXTRACT_MINIMUM();
 	TEST_DELETE();
 	TEST_DECREASE_KEY();
+
+}
+
+int main() {
+	EXPENSIVE_TEST();
 
 	return 0;
 }
