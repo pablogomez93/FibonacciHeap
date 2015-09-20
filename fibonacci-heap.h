@@ -86,7 +86,7 @@ void FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
 
 template<typename T> 
 T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() {
-	return _min->value;
+	return (_min == nullptr) ? (T*) _min : _min->value;
 }
 
 

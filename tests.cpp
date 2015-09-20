@@ -1,4 +1,5 @@
 #include <iostream>
+#include <assert.h>
 #include "fibonacci-heap.h"
 
 using namespace std;
@@ -6,26 +7,6 @@ using namespace std;
 struct Persona {
 	int id;
 	char name;
-};
-
-void TEST_INSERT_ELEMENTS() {
-	Persona myStruct1{5, 'a'},
-			myStruct2{-18, 'b'},
-			myStruct3{8, 'c'},
-			myStruct4{10, 'd'},
-			myStruct5{-17, 'e'},
-			myStruct6{56, 'f'},
-			myStruct7{1, 'g'},
-			*result;
-	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
-
-	fib.FIB_HEAP_INSERT(5, &myStruct1);
-	fib.FIB_HEAP_INSERT(-18, &myStruct2);
-	fib.FIB_HEAP_INSERT(8, &myStruct3);
-	fib.FIB_HEAP_INSERT(10, &myStruct4);
-	fib.FIB_HEAP_INSERT(-17, &myStruct5);
-	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(1, &myStruct7);
 };
 
 
@@ -40,15 +21,16 @@ void TEST_SIZE() {
 			*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
-	printf("\n%s\n", "Test de size:");
-	fib.FIB_HEAP_INSERT(5, &myStruct1);
-	fib.FIB_HEAP_INSERT(-18, &myStruct2);
-	fib.FIB_HEAP_INSERT(8, &myStruct3);
-	fib.FIB_HEAP_INSERT(10, &myStruct4);
-	fib.FIB_HEAP_INSERT(-17, &myStruct5);
-	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(1, &myStruct7);
-	printf("Size: %d\n\n", fib.SIZE());
+	printf("\n%s", "[Test] SIZE method: ");
+	fib.FIB_HEAP_INSERT(5, &myStruct1); 	assert(fib.SIZE() == 1);
+	fib.FIB_HEAP_INSERT(-18, &myStruct2);   assert(fib.SIZE() == 2);
+	fib.FIB_HEAP_INSERT(8, &myStruct3);		assert(fib.SIZE() == 3);
+	fib.FIB_HEAP_INSERT(10, &myStruct4);	assert(fib.SIZE() == 4);
+	fib.FIB_HEAP_INSERT(-17, &myStruct5);	assert(fib.SIZE() == 5);
+	fib.FIB_HEAP_INSERT(56, &myStruct6);	assert(fib.SIZE() == 6);
+	fib.FIB_HEAP_INSERT(1, &myStruct7);		assert(fib.SIZE() == 7);
+
+	printf("Success!\n");
 };
 
 
@@ -62,17 +44,17 @@ void TEST_ASK_MINIMUM() {
 		myStruct7{1, 'g'},
 		*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
-	fib.FIB_HEAP_INSERT(5, &myStruct1);
-	fib.FIB_HEAP_INSERT(-18, &myStruct2);
-	fib.FIB_HEAP_INSERT(8, &myStruct3);
-	fib.FIB_HEAP_INSERT(10, &myStruct4);
-	fib.FIB_HEAP_INSERT(-17, &myStruct5);
-	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(1, &myStruct7);
+	
+	printf("%s", "[Test] MINIMUM method:");
+	fib.FIB_HEAP_INSERT(5, &myStruct1);		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
+	fib.FIB_HEAP_INSERT(10, &myStruct4);	assert(fib.FIB_HEAP_MINIMUM()->id == 5);
+	fib.FIB_HEAP_INSERT(8, &myStruct3);		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
+	fib.FIB_HEAP_INSERT(-18, &myStruct2);	assert(fib.FIB_HEAP_MINIMUM()->id == -18);
+	fib.FIB_HEAP_INSERT(-17, &myStruct5);	assert(fib.FIB_HEAP_MINIMUM()->id == -18);
+	fib.FIB_HEAP_INSERT(56, &myStruct6);	assert(fib.FIB_HEAP_MINIMUM()->id == -18);
+	fib.FIB_HEAP_INSERT(1, &myStruct7);		assert(fib.FIB_HEAP_MINIMUM()->id == -18);
 
-	printf("%s\n", "Test de get minumum:");
-	result = fib.FIB_HEAP_MINIMUM();
-	printf("%d\n\n\n", result->id);
+	printf("Success!\n");
 
 };
 
@@ -83,7 +65,7 @@ void TEST_EXTRACT_MINIMUM() {
 		myStruct4{10, 'd'},
 		myStruct5{-17, 'e'},
 		myStruct6{56, 'f'},
-		myStruct7{1, 'g'},
+		myStruct7{0, 'g'},
 		*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 	fib.FIB_HEAP_INSERT(5, &myStruct1);
@@ -92,41 +74,39 @@ void TEST_EXTRACT_MINIMUM() {
 	fib.FIB_HEAP_INSERT(10, &myStruct4);
 	fib.FIB_HEAP_INSERT(-17, &myStruct5);
 	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(1, &myStruct7);
+	fib.FIB_HEAP_INSERT(0, &myStruct7);
 
-	printf("%s\n", "Test de extract minumum 1:");
+	printf("%s", "[Test] EXTRACT MINIMUM:");
+	
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == -18);
+		assert(fib.FIB_HEAP_MINIMUM()->id == -17);
 
-	printf("%s\n", "Test de extract minumum 2:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == -17);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 0);
 
-	printf("%s\n", "Test de extract minumum 3:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == 0);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
 
-	printf("%s\n", "Test de extract minumum 4:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == 5);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 8);
 
-	printf("%s\n", "Test de extract minumum 5:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == 8);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 10);
 
-	printf("%s\n", "Test de extract minumum 6:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
-	printf("MINIMO QUE QUEDO: %d\n\n\n", fib.FIB_HEAP_MINIMUM()->id);
+		assert(result->id == 10);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 56);
 
-	printf("%s\n", "Test de extract minumum 7:");
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-	printf("MINIMO EXTRAIDO : %d\n", result->id);
+		assert(result->id == 56);
+		assert(fib.FIB_HEAP_MINIMUM() == nullptr);
+
+	printf("Success!\n");
 };
 
 void TEST_DELETE() {
@@ -138,7 +118,6 @@ void TEST_DECREASE_KEY() {
 };
 
 void EXPENSIVE_TEST() {
-	TEST_INSERT_ELEMENTS();
 	TEST_SIZE();
 	TEST_ASK_MINIMUM();
 	TEST_EXTRACT_MINIMUM();
@@ -150,5 +129,6 @@ void EXPENSIVE_TEST() {
 int main() {
 	EXPENSIVE_TEST();
 
+	printf("\nOK! All TEST passed!\n");
 	return 0;
 }
