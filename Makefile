@@ -1,7 +1,8 @@
 all:
-	@gcc fibonacci.c -o fibonaccic
-	@g++ fibonacci.cpp -o fibonaccicpp
+	@g++ -std=c++11 tests.cpp -o fibonaccih
+
+runtests:
+	./fibonaccih
 
 clear:
-	@rm fibonaccic
-	@rm fibonaccicpp
+	@rm fibonaccih
