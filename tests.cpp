@@ -36,16 +36,16 @@ void TEST_SIZE() {
 
 void TEST_ASK_MINIMUM() {
 	Persona myStruct1{5, 'a'},
-		myStruct2{-18, 'b'},
-		myStruct3{8, 'c'},
-		myStruct4{10, 'd'},
-		myStruct5{-17, 'e'},
-		myStruct6{56, 'f'},
-		myStruct7{1, 'g'},
-		*result;
+			myStruct2{-18, 'b'},
+			myStruct3{8, 'c'},
+			myStruct4{10, 'd'},
+			myStruct5{-17, 'e'},
+			myStruct6{56, 'f'},
+			myStruct7{1, 'g'},
+			*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 	
-	printf("%s", "[Test] MINIMUM method:");
+	printf("%s", "[Test] MINIMUM method: ");
 	fib.FIB_HEAP_INSERT(5, &myStruct1);		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
 	fib.FIB_HEAP_INSERT(10, &myStruct4);	assert(fib.FIB_HEAP_MINIMUM()->id == 5);
 	fib.FIB_HEAP_INSERT(8, &myStruct3);		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
@@ -60,23 +60,25 @@ void TEST_ASK_MINIMUM() {
 
 void TEST_EXTRACT_MINIMUM() {
 	Persona myStruct1{5, 'a'},
-		myStruct2{-18, 'b'},
-		myStruct3{8, 'c'},
-		myStruct4{10, 'd'},
-		myStruct5{-17, 'e'},
-		myStruct6{56, 'f'},
-		myStruct7{0, 'g'},
-		*result;
+			myStruct2{-18, 'b'},
+			myStruct3{8, 'c'},
+			myStruct4{10, 'd'},
+			myStruct5{-17, 'e'},
+			myStruct6{56, 'f'},
+			myStruct7{1, 'g'},
+			*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
+
 	fib.FIB_HEAP_INSERT(5, &myStruct1);
 	fib.FIB_HEAP_INSERT(-18, &myStruct2);
 	fib.FIB_HEAP_INSERT(8, &myStruct3);
 	fib.FIB_HEAP_INSERT(10, &myStruct4);
 	fib.FIB_HEAP_INSERT(-17, &myStruct5);
 	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(0, &myStruct7);
+	fib.FIB_HEAP_INSERT(1, &myStruct7);
 
-	printf("%s", "[Test] EXTRACT MINIMUM:");
+
+	printf("%s", "[Test] EXTRACT_MINIMUM method: ");
 	
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 		assert(result->id == -18);
@@ -84,10 +86,10 @@ void TEST_EXTRACT_MINIMUM() {
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 		assert(result->id == -17);
-		assert(fib.FIB_HEAP_MINIMUM()->id == 0);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 1);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-		assert(result->id == 0);
+		assert(result->id == 1);
 		assert(fib.FIB_HEAP_MINIMUM()->id == 5);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
@@ -114,7 +116,23 @@ void TEST_DELETE() {
 };
 
 void TEST_DECREASE_KEY() {
+	Persona myStruct1{1, 'a'},
+			myStruct2{2, 'b'},
+			myStruct3{3, 'c'},
+			*result;
+	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
+	fib.FIB_HEAP_INSERT(-10, &myStruct1);
+	fib.FIB_HEAP_INSERT(1, &myStruct2);
+	fib.FIB_HEAP_INSERT(-20, &myStruct3);
+
+	printf("%s", "[Test] DECREASE_KEY method: ");
+
+	fib.FIB_HEAP_DECREASE_KEY(0, -30);
+
+	assert(fib.FIB_HEAP_MINIMUM()->id == 1);
+	
+	printf("Success!\n");
 };
 
 void EXPENSIVE_TEST() {
