@@ -32,13 +32,13 @@ class FibonacciHeap {
 		//Operations for a mergeable heap:
 		FibonacciHeap();
 		int FIB_HEAP_INSERT(int key, T* val);
-		T* FIB_HEAP_MINIMUM();
+		T* FIB_HEAP_MINIMUM() const;
 		T* FIB_HEAP_EXTRACT_MIN();
 		//void FIB_HEAP_UNION(FibonacciHeap&);
 		void FIB_HEAP_DECREASE_KEY(int, int);
 		void FIB_HEAP_DELETE(int);	
-		int SIZE();
-		int FIB_GET_ID(T*);	
+		int SIZE() const;
+		int FIB_GET_ID(T*) const;	
 
 	private:
 		int _n, _next_oid;
@@ -93,7 +93,7 @@ int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
 
 
 template<typename T> 
-T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() {
+T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
 	return _min == _roots.end() ? nullptr : (*_min)->value;
 }
 
@@ -238,12 +238,12 @@ void FibonacciHeap<T>::FIB_HEAP_DELETE(int node_id) {
 }
 
 template<typename T> 
-int FibonacciHeap<T>::SIZE() {
+int FibonacciHeap<T>::SIZE() const {
 	return _n;
 }
 
 template<typename T>
-int FibonacciHeap<T>::FIB_GET_ID(T* ptr) {
+int FibonacciHeap<T>::FIB_GET_ID(T* ptr) const {
 	int id = -1;
 
 	for (int i = _references.size() - 1; i >= 0; i--)
