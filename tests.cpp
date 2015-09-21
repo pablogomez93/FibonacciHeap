@@ -9,6 +9,41 @@ struct Persona {
 	char name;
 };
 
+void TEST_INSERT() {
+	Persona myStruct1{5, 'a'},
+			myStruct2{-18, 'b'},
+			myStruct3{8, 'c'},
+			myStruct4{10, 'd'},
+			myStruct5{-17, 'e'},
+			myStruct6{56, 'f'},
+			myStruct7{1, 'g'},
+			*result;
+	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
+
+	printf("\n%s", "[Test] INSERT method: ");
+	assert(fib.FIB_HEAP_INSERT(5, &myStruct1) == 0);
+	assert(fib.SIZE() == 1);
+	
+	assert(fib.FIB_HEAP_INSERT(-18, &myStruct2) == 1);
+	assert(fib.SIZE() == 2);
+	
+	assert(fib.FIB_HEAP_INSERT(8, &myStruct3) == 2);
+	assert(fib.SIZE() == 3);
+	
+	assert(fib.FIB_HEAP_INSERT(10, &myStruct4) == 3);
+	assert(fib.SIZE() == 4);
+	
+	assert(fib.FIB_HEAP_INSERT(-17, &myStruct5) == 4);
+	assert(fib.SIZE() == 5);
+	
+	assert(fib.FIB_HEAP_INSERT(56, &myStruct6) == 5);
+	assert(fib.SIZE() == 6);
+	
+	assert(fib.FIB_HEAP_INSERT(1, &myStruct7) == 6);
+	assert(fib.SIZE() == 7);
+
+	printf("Success!\n");
+};
 
 void TEST_SIZE() {
 	Persona myStruct1{5, 'a'},
@@ -162,10 +197,10 @@ void TEST_DELETE() {
 	assert(fib.SIZE() == 0);
 
 	printf("Success!\n");
-
 }
 
 void EXPENSIVE_TEST() {
+	TEST_INSERT();
 	TEST_SIZE();
 	TEST_ASK_MINIMUM();
 	TEST_EXTRACT_MINIMUM();
