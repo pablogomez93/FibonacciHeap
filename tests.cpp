@@ -111,10 +111,6 @@ void TEST_EXTRACT_MINIMUM() {
 	printf("Success!\n");
 };
 
-void TEST_DELETE() {
-
-};
-
 void TEST_DECREASE_KEY() {
 	Persona myStruct1{1, 'a'},
 			myStruct2{2, 'b'},
@@ -135,13 +131,47 @@ void TEST_DECREASE_KEY() {
 	printf("Success!\n");
 };
 
+void TEST_DELETE() {
+	Persona myStruct1{1, 'a'},
+			myStruct2{2, 'b'},
+			myStruct3{3, 'c'},
+			*result;
+	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
+
+	printf("%s", "[Test] DELETE method: ");
+
+	fib.FIB_HEAP_INSERT(-10, &myStruct1);
+	fib.FIB_HEAP_INSERT(1, &myStruct2);
+	fib.FIB_HEAP_INSERT(-20, &myStruct3);
+
+	assert(fib.FIB_HEAP_MINIMUM()->id == 3);
+
+	fib.FIB_HEAP_DELETE(2);
+
+	assert(fib.SIZE() == 2);
+	assert(fib.FIB_HEAP_MINIMUM()->id == 1);
+
+	result = fib.FIB_HEAP_EXTRACT_MIN();
+
+	assert(result->id == 1);
+	assert(fib.SIZE() == 1);
+	assert(fib.FIB_HEAP_MINIMUM()->id == 2);
+
+	result = fib.FIB_HEAP_EXTRACT_MIN();
+	assert(result->id == 2);
+	assert(fib.SIZE() == 0);
+
+	printf("Success!\n");
+
+}
+
 void EXPENSIVE_TEST() {
 	TEST_SIZE();
 	TEST_ASK_MINIMUM();
 	TEST_EXTRACT_MINIMUM();
 	TEST_DELETE();
 	TEST_DECREASE_KEY();
-
+	TEST_DELETE();
 }
 
 int main() {
