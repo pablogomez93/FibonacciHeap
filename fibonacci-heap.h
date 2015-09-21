@@ -44,11 +44,11 @@ class FibonacciHeap {
 		node_list _roots;
 		vector<typename node_list::iterator> _references;
 		typename node_list::iterator _min, _rightNode;
-		void swap(Node<T>** x, Node<T>** y);
-		void CONSOLIDATE();
-		void LINK(Node<T>* y, Node<T>* x);
-		void CUT(Node<T>* x, Node<T>* y);
-		void CASCADING_CUT(Node<T>* y);
+		void _swap(Node<T>** x, Node<T>** y);
+		void _consolidate();
+		void _link(Node<T>* y, Node<T>* x);
+		void _cut(Node<T>* x, Node<T>* y);
+		void _cascading_cut(Node<T>* y);
 
 };
 
@@ -122,7 +122,7 @@ T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
 	_min = _roots.end();
 
 	if(_roots.size() > 0)
-		CONSOLIDATE();
+		_consolidate();
 
 	_n--;
 	
@@ -130,7 +130,7 @@ T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
 }
 
 template<typename T> 
-void FibonacciHeap<T>::CONSOLIDATE() {
+void FibonacciHeap<T>::_consolidate() {
 
 	vector<Node<T>*> roots_sort_by_degree;
 	roots_sort_by_degree.reserve(_n);
@@ -147,9 +147,9 @@ void FibonacciHeap<T>::CONSOLIDATE() {
 			Node<T>* y = roots_sort_by_degree[d];
 
 			if(x->key > y->key)
-				swap(&x, &y);
+				_swap(&x, &y);
 
-			LINK(y, x);
+			_link(y, x);
 			roots_sort_by_degree[d] = nullptr;
 			d++;
 		}
@@ -174,14 +174,14 @@ void FibonacciHeap<T>::CONSOLIDATE() {
 }
 
 template<typename T> 
-void FibonacciHeap<T>::swap(Node<T>** x, Node<T>** y) {
+void FibonacciHeap<T>::_swap(Node<T>** x, Node<T>** y) {
 	Node<T>* temp = *x;
 	*x = *y;
 	*y = temp;
 }
 
 template<typename T> 
-void FibonacciHeap<T>::LINK(Node<T>* y, Node<T>* x) {
+void FibonacciHeap<T>::_link(Node<T>* y, Node<T>* x) {
 	x->children.push_back(y);
 	x->degree++;
 	y->marked = false;
@@ -199,8 +199,8 @@ void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, int k) {
 	x->key = k;
 
 	if(x->parent != nullptr && x->key < x->parent->key) {
-		CUT(x, x->parent);
-		CASCADING_CUT(x->parent);
+		_cut(x, x->parent);
+		_cascading_cut(x->parent);
 	}
 
 	if(x->key < (*_min)->key) 
@@ -208,7 +208,7 @@ void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, int k) {
 }
 
 template<typename T> 
-void FibonacciHeap<T>::CUT(Node<T>* x, Node<T>* y) {
+void FibonacciHeap<T>::_cut(Node<T>* x, Node<T>* y) {
 	y->children.erase(_references[x->oid]);
 	x->parent = nullptr;
 	x->marked = false;
@@ -219,14 +219,14 @@ void FibonacciHeap<T>::CUT(Node<T>* x, Node<T>* y) {
 }
 
 template<typename T> 
-void FibonacciHeap<T>::CASCADING_CUT(Node<T>* y) {
+void FibonacciHeap<T>::_cascading_cut(Node<T>* y) {
 	Node<T>* z = y->parent;
 	if(z != nullptr)
 		if(!y->marked) {
 			y->marked = true;
 		} else {
-			CUT(y, z);
-			CASCADING_CUT(z);
+			_cut(y, z);
+			_cascading_cut(z);
 		}
 }
 
