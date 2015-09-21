@@ -45,6 +45,37 @@ void TEST_INSERT() {
 	printf("Success!\n");
 };
 
+void TEST_GET_ID() {
+	Persona myStruct1{5, 'a'},
+			myStruct2{-18, 'b'},
+			myStruct3{8, 'c'},
+			myStruct4{10, 'd'},
+			myStruct5{-17, 'e'},
+			myStruct6{56, 'f'},
+			myStruct7{1, 'g'},
+			*result;
+	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
+
+	printf("%s", "[Test] GET_ID method: ");
+	fib.FIB_HEAP_INSERT(5, &myStruct1);
+	fib.FIB_HEAP_INSERT(-18, &myStruct2);
+	fib.FIB_HEAP_INSERT(8, &myStruct3);
+	fib.FIB_HEAP_INSERT(10, &myStruct4);
+	fib.FIB_HEAP_INSERT(-17, &myStruct5);
+	fib.FIB_HEAP_INSERT(56, &myStruct6);
+	fib.FIB_HEAP_INSERT(1, &myStruct7);
+
+	assert(fib.FIB_GET_ID(&myStruct1) == 0);
+	assert(fib.FIB_GET_ID(&myStruct2) == 1);
+	assert(fib.FIB_GET_ID(&myStruct3) == 2);
+	assert(fib.FIB_GET_ID(&myStruct4) == 3);
+	assert(fib.FIB_GET_ID(&myStruct5) == 4);
+	assert(fib.FIB_GET_ID(&myStruct6) == 5);
+	assert(fib.FIB_GET_ID(&myStruct7) == 6);
+
+	printf("Success!\n");
+};
+
 void TEST_SIZE() {
 	Persona myStruct1{5, 'a'},
 			myStruct2{-18, 'b'},
@@ -56,7 +87,7 @@ void TEST_SIZE() {
 			*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
-	printf("\n%s", "[Test] SIZE method: ");
+	printf("%s", "[Test] SIZE method: ");
 	fib.FIB_HEAP_INSERT(5, &myStruct1); 	assert(fib.SIZE() == 1);
 	fib.FIB_HEAP_INSERT(-18, &myStruct2);   assert(fib.SIZE() == 2);
 	fib.FIB_HEAP_INSERT(8, &myStruct3);		assert(fib.SIZE() == 3);
@@ -200,16 +231,19 @@ void TEST_DELETE() {
 }
 
 void EXPENSIVE_TEST() {
+
+}
+
+int main() {
 	TEST_INSERT();
+	TEST_GET_ID();
 	TEST_SIZE();
 	TEST_ASK_MINIMUM();
 	TEST_EXTRACT_MINIMUM();
 	TEST_DELETE();
 	TEST_DECREASE_KEY();
 	TEST_DELETE();
-}
 
-int main() {
 	EXPENSIVE_TEST();
 
 	printf("\nOK! All TEST passed!\n");

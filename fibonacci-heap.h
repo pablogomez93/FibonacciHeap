@@ -38,7 +38,7 @@ class FibonacciHeap {
 		void FIB_HEAP_DECREASE_KEY(int, int);
 		void FIB_HEAP_DELETE(int);	
 		int SIZE();
-		int fibheap_get_node_id(T*);	
+		int FIB_GET_ID(T*);	
 
 	private:
 		int _n, _next_oid;
@@ -243,11 +243,11 @@ int FibonacciHeap<T>::SIZE() {
 }
 
 template<typename T>
-int FibonacciHeap<T>::fibheap_get_node_id(T* ptr) {
+int FibonacciHeap<T>::FIB_GET_ID(T* ptr) {
 	int id = -1;
 
 	for (int i = _references.size() - 1; i >= 0; i--)
-		if((*(_references[i])) == ptr)
+		if((*(_references[i]))->value == ptr)
 			return (*(_references[i]))->oid;
 
 	return id;
