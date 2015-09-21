@@ -41,10 +41,9 @@ class FibonacciHeap {
 
 	private:
 		int _n, _next_oid;
-		Node<T>* _min;
 		node_list _roots;
 		vector<typename node_list::iterator> _references;
-		typename node_list::iterator _iterToMinimum, _rightNode;
+		typename node_list::iterator _min, _rightNode;
 		void swap(Node<T>** x, Node<T>** y);
 		void CONSOLIDATE();
 		void LINK(Node<T>* y, Node<T>* x);
@@ -56,7 +55,7 @@ class FibonacciHeap {
 
 template<typename T> 
 FibonacciHeap<T>::FibonacciHeap() {
-	_iterToMinimum = _roots.end();
+	_min = _roots.end();
 	_n     = 0;
 	_roots = node_list();
 	_next_oid = 0;
@@ -65,8 +64,8 @@ FibonacciHeap<T>::FibonacciHeap() {
 
 template<typename T>
 int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
-	Node<T>* newGuest = new Node<T>{key, false, val, 0, node_list(), nullptr, _next_oid};
-	_next_oid++;
+	Node<T>* newGuest = new Node<T>{key, false, val, 0, node_list(), nullptr, _next_oid++};
+
 	/**
 	 * Adding node to the roots list of the heap. 
 	 */
@@ -80,8 +79,8 @@ int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
 	/**
 	 * Update minimum of the entire heap.
 	 */
-	if(_iterToMinimum == _roots.end() || (*_iterToMinimum)->key > newGuest->key)
-		_iterToMinimum = --(_roots.end());
+	if(_min == _roots.end() || (*_min)->key > newGuest->key)
+		_min = --(_roots.end());
 
 	/**
 	 * Increase the count of the elements current in the heap.
@@ -94,41 +93,33 @@ int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
 
 template<typename T> 
 T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() {
-	return _iterToMinimum == _roots.end() ? nullptr : (*_iterToMinimum)->value;
+	return _min == _roots.end() ? nullptr : (*_min)->value;
 }
 
 
 template<typename T> 
 T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
-	if(_iterToMinimum == _roots.end())	return nullptr;
+	if(_min == _roots.end())	return nullptr;
 
-	T* backup_min = (*_iterToMinimum)->value;
+	T* backup_min = (*_min)->value;
 
 	/**
 	 * Applying all children of the smallest node as roots of the heap
 	 * cleaning its parent (it becomes null).
 	 */
-	for (typename node_list::iterator it = (*_iterToMinimum)->children.begin(); it != (*_iterToMinimum)->children.end(); ++it) {
+	for (typename node_list::iterator it = (*_min)->children.begin(); it != (*_min)->children.end(); ++it) {
 		(*it)->parent = nullptr;
 		_roots.push_back(*it);
 
 		_references[(*it)->oid] = --(_roots.end());
 	}
 
-	/*
-	for (int i = 0; i < (*_iterToMinimum)->children.size(); ++i) {
-		(*_iterToMinimum)->children[i]->parent = nullptr;
-		_roots.push_back((*_iterToMinimum)->children[i]);
-
-		// _references[(*_iterToMinimum)->oid] = --(_roots.end());
-	}*/
-
 	/**
 	 * Removing the minimum node of the root_list.
 	 */
-	_rightNode = _roots.right(_iterToMinimum);
-	_roots.erase(_iterToMinimum);
-	_iterToMinimum = _roots.end();
+	_rightNode = _roots.right(_min);
+	_roots.erase(_min);
+	_min = _roots.end();
 
 	if(_roots.size() > 0)
 		CONSOLIDATE();
@@ -166,17 +157,17 @@ void FibonacciHeap<T>::CONSOLIDATE() {
 		roots_sort_by_degree[d] = x;
     }
 
-    _iterToMinimum = _roots.end();
+    _min = _roots.end();
 
     for (int i = 0; i < roots_sort_by_degree.size(); i++)
     	if(roots_sort_by_degree[i] != nullptr) {
-    		if(_iterToMinimum == _roots.end())	
+    		if(_min == _roots.end())	
     			_roots.clear();
 
     		_roots.push_back(roots_sort_by_degree[i]);
 
-    		if(_iterToMinimum == _roots.end() || roots_sort_by_degree[i]->key < (*_iterToMinimum)->key)
-    			_iterToMinimum = --(_roots.end());
+    		if(_min == _roots.end() || roots_sort_by_degree[i]->key < (*_min)->key)
+    			_min = --(_roots.end());
 
     	}
 
@@ -212,8 +203,8 @@ void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, int k) {
 		CASCADING_CUT(x->parent);
 	}
 
-	if(x->key < _min->key) 
-		_iterToMinimum = _references[node_id];
+	if(x->key < (*_min)->key) 
+		_min = _references[node_id];
 }
 
 template<typename T> 
