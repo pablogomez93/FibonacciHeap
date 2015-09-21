@@ -120,6 +120,7 @@ T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
 	 */
 	_rightNode = _roots.right(_min);
 	_roots.erase(_min);
+	_references[(*_min)->oid] = _roots.end();
 	_min = _roots.end();
 
 	if(_roots.size() > 0)
@@ -176,6 +177,10 @@ void FibonacciHeap<T>::_consolidate() {
 
 template<typename T> 
 void FibonacciHeap<T>::_swap(Node<T>** x, Node<T>** y) {
+	typename node_list::iterator temp_iterator = _references[(*x)->oid];
+	_references[(*x)->oid] = _references[(*y)->oid];
+	_references[(*y)->oid] = temp_iterator;
+
 	Node<T>* temp = *x;
 	*x = *y;
 	*y = temp;
@@ -187,9 +192,9 @@ void FibonacciHeap<T>::_link(Node<T>* y, Node<T>* x) {
 	x->degree++;
 	y->marked = false;
 
-	_references[y->oid] = --((x->children).end());
+	_roots.erase(_references[y->oid]);
 
-	_roots.remove(y);
+	_references[y->oid] = --((x->children).end());
 }
 
 
