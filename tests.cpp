@@ -1,4 +1,7 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <stdlib.h>
 #include <assert.h>
 #include "fibonacci-heap.h"
 
