@@ -3,6 +3,7 @@
 
 #include <limits>
 #include <vector>
+#include <stdexcept>
 #include "circular_doubly_linked_list/circular_doubly_linked_list.h"
 
 /**
@@ -100,7 +101,7 @@ T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
 
 template<typename T> 
 T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
-	if(_min == _roots.end())	return nullptr;
+	if(_n < 1)	throw invalid_argument("Heap empty. There is no minimum to extract!");
 
 	T* backup_min = (*_min)->value;
 
