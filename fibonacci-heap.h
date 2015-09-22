@@ -101,7 +101,7 @@ T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
 
 template<typename T> 
 T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
-	if(_n < 1)	throw invalid_argument("Heap empty. There is no minimum to extract!");
+	if(_n < 1)	throw runtime_error("Heap empty. There is no minimum to extract!");
 
 	T* backup_min = (*_min)->value;
 
