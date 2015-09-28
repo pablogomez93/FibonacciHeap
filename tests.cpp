@@ -138,13 +138,13 @@ void TEST_EXTRACT_MINIMUM() {
 			*result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
-	fib.FIB_HEAP_INSERT(5, &myStruct1);
-	fib.FIB_HEAP_INSERT(-18, &myStruct2);
-	fib.FIB_HEAP_INSERT(8, &myStruct3);
-	fib.FIB_HEAP_INSERT(10, &myStruct4);
-	fib.FIB_HEAP_INSERT(-17, &myStruct5);
-	fib.FIB_HEAP_INSERT(56, &myStruct6);
-	fib.FIB_HEAP_INSERT(1, &myStruct7);
+	fib.FIB_HEAP_INSERT(myStruct1.id, &myStruct1);
+	fib.FIB_HEAP_INSERT(myStruct2.id, &myStruct2);
+	fib.FIB_HEAP_INSERT(myStruct3.id, &myStruct3);
+	fib.FIB_HEAP_INSERT(myStruct4.id, &myStruct4);
+	fib.FIB_HEAP_INSERT(myStruct5.id, &myStruct5);
+	fib.FIB_HEAP_INSERT(myStruct6.id, &myStruct6);
+	fib.FIB_HEAP_INSERT(myStruct7.id, &myStruct7);
 
 
 	printf("%s", "[Test] EXTRACT_MINIMUM method: ");
