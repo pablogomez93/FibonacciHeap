@@ -130,7 +130,7 @@ void TEST_ASK_MINIMUM() {
 void TEST_EXTRACT_MINIMUM() {
 	Persona myStruct1{5, 'a'},
 			myStruct2{-18, 'b'},
-			myStruct3{8, 'c'},
+			myStruct3{10, 'c'},
 			myStruct4{10, 'd'},
 			myStruct5{-17, 'e'},
 			myStruct6{56, 'f'},
@@ -148,6 +148,8 @@ void TEST_EXTRACT_MINIMUM() {
 
 
 	printf("%s", "[Test] EXTRACT_MINIMUM method: ");
+
+	assert(fib.FIB_HEAP_MINIMUM()->id == -18);
 	
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 		assert(result->id == -18);
@@ -163,10 +165,10 @@ void TEST_EXTRACT_MINIMUM() {
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 		assert(result->id == 5);
-		assert(fib.FIB_HEAP_MINIMUM()->id == 8);
+		assert(fib.FIB_HEAP_MINIMUM()->id == 10);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
-		assert(result->id == 8);
+		assert(result->id == 10);
 		assert(fib.FIB_HEAP_MINIMUM()->id == 10);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
