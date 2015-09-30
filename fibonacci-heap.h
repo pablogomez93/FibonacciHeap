@@ -17,7 +17,7 @@ template<typename T>
 struct Node {
 	int key;
 	bool marked;
-	T* value;
+	T& value;
 	int degree;
 	CircularLinkedList<Node<T>*> children;
 	Node* parent;
@@ -32,14 +32,14 @@ class FibonacciHeap {
 	public:
 		//Operations for a mergeable heap:
 		FibonacciHeap();
-		int FIB_HEAP_INSERT(int key, T* val);
-		T* FIB_HEAP_MINIMUM() const;
-		T* FIB_HEAP_EXTRACT_MIN();
+		int FIB_HEAP_INSERT(int key, T& val);
+		T& FIB_HEAP_MINIMUM() const;
+		T& FIB_HEAP_EXTRACT_MIN();
 		//void FIB_HEAP_UNION(FibonacciHeap&);
 		void FIB_HEAP_DECREASE_KEY(int, int);
 		void FIB_HEAP_DELETE(int);	
 		int SIZE() const;
-		int FIB_GET_ID(T*) const;	
+		int FIB_GET_ID(T&) const;	
 
 	private:
 		int _n, _next_oid;
@@ -65,7 +65,7 @@ FibonacciHeap<T>::FibonacciHeap() {
 
 
 template<typename T>
-int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
+int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T& val) {
 	Node<T>* newGuest = new Node<T>{key, false, val, 0, node_list(), nullptr, _next_oid++};
 
 	/**
@@ -94,16 +94,18 @@ int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T* val) {
 
 
 template<typename T> 
-T* FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
-	return _min == _roots.end() ? nullptr : (*_min)->value;
+T& FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
+	if(_n < 1)	throw runtime_error("Heap empty. There is no minimum!");
+
+	return (*_min)->value;
 }
 
 
 template<typename T> 
-T* FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
+T& FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
 	if(_n < 1)	throw runtime_error("Heap empty. There is no minimum to extract!");
 
-	T* backup_min = (*_min)->value;
+	T& backup_min = (*_min)->value;
 
 	/**
 	 * Applying all children of the smallest node as roots of the heap
@@ -249,14 +251,12 @@ int FibonacciHeap<T>::SIZE() const {
 }
 
 template<typename T>
-int FibonacciHeap<T>::FIB_GET_ID(T* ptr) const {
-	int id = -1;
-
+int FibonacciHeap<T>::FIB_GET_ID(T& ptr) const {
 	for (int i = _references.size() - 1; i >= 0; i--)
-		if((*(_references[i]))->value == ptr)
+		if(&ptr == &((*(_references[i]))->value))
 			return (*(_references[i]))->oid;
 
-	return id;
+	return -1;
 }
 
 #endif //FIBHEAP_H
