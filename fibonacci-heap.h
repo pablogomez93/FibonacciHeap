@@ -32,14 +32,13 @@ class FibonacciHeap {
 	public:
 		//Operations for a mergeable heap:
 		FibonacciHeap();
-		int FIB_HEAP_INSERT(int key, T& val);
-		T& FIB_HEAP_MINIMUM() const;
-		T& FIB_HEAP_EXTRACT_MIN();
-		//void FIB_HEAP_UNION(FibonacciHeap&);
+		int  FIB_HEAP_INSERT(int key, T& val);
+		T&   FIB_HEAP_MINIMUM() const;
+		T&   FIB_HEAP_EXTRACT_MIN();
 		void FIB_HEAP_DECREASE_KEY(int, int);
 		void FIB_HEAP_DELETE(int);	
-		int SIZE() const;
-		int FIB_GET_ID(T&) const;	
+		int  SIZE() const;
+		int  FIB_GET_ID(T&) const;	
 
 	private:
 		int _n, _next_oid;
