@@ -136,9 +136,9 @@ template<typename T>
 void FibonacciHeap<T>::_consolidate() {
 
 	vector<Node<T>*> roots_sort_by_degree;
-	roots_sort_by_degree.reserve(_n);
+	roots_sort_by_degree.reserve(log2(_n));
 
-	for (int i = 0; i < _n-1; i++)
+	for (int i = 0; i < log2(_n); i++)
 		roots_sort_by_degree.push_back(nullptr);
 
     for (int i = _roots.size(); i > 0; i--) {
