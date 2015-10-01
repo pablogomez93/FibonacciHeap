@@ -39,6 +39,7 @@ class FibonacciHeap {
 		void FIB_HEAP_DELETE(int);	
 		int  SIZE() const;
 		int  FIB_GET_ID(T&) const;	
+		bool FIB_HEAP_EMPTY() const;
 
 	private:
 		int _n, _next_oid;
@@ -54,12 +55,19 @@ class FibonacciHeap {
 };
 
 
+
 template<typename T> 
 FibonacciHeap<T>::FibonacciHeap() {
 	_min = _roots.end();
 	_n     = 0;
 	_roots = node_list();
 	_next_oid = 0;
+}
+
+
+template<typename T> 
+bool FibonacciHeap<T>::FIB_HEAP_EMPTY() const {
+	return !_n;
 }
 
 
