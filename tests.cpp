@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <random>
 #include <stdlib.h>
 #include <assert.h>
 #include "fibonacci-heap.h"
@@ -19,34 +20,34 @@ void TEST_INSERT() {
 			myStruct4{10, 'd'},
 			myStruct5{-17, 'e'},
 			myStruct6{56, 'f'},
-			myStruct7{1, 'g'},
-			*result;
+			myStruct7{1, 'g'};
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
 	printf("\n%s", "[Test] INSERT method: ");
-	assert(fib.FIB_HEAP_INSERT(5, myStruct1) == 0);
-	assert(fib.SIZE() == 1);
+	assert(fib.FIB_HEAP_INSERT(5, myStruct1).oid == 0);
+	assert(fib.FIB_HEAP_SIZE() == 1);
 	
-	assert(fib.FIB_HEAP_INSERT(-18, myStruct2) == 1);
-	assert(fib.SIZE() == 2);
+	assert(fib.FIB_HEAP_INSERT(-18, myStruct2).oid == 1);
+	assert(fib.FIB_HEAP_SIZE() == 2);
 	
-	assert(fib.FIB_HEAP_INSERT(8, myStruct3) == 2);
-	assert(fib.SIZE() == 3);
+	assert(fib.FIB_HEAP_INSERT(8, myStruct3).oid == 2);
+	assert(fib.FIB_HEAP_SIZE() == 3);
 	
-	assert(fib.FIB_HEAP_INSERT(10, myStruct4) == 3);
-	assert(fib.SIZE() == 4);
+	assert(fib.FIB_HEAP_INSERT(10, myStruct4).oid == 3);
+	assert(fib.FIB_HEAP_SIZE() == 4);
 	
-	assert(fib.FIB_HEAP_INSERT(-17, myStruct5) == 4);
-	assert(fib.SIZE() == 5);
+	assert(fib.FIB_HEAP_INSERT(-17, myStruct5).oid == 4);
+	assert(fib.FIB_HEAP_SIZE() == 5);
 	
-	assert(fib.FIB_HEAP_INSERT(56, myStruct6) == 5);
-	assert(fib.SIZE() == 6);
+	assert(fib.FIB_HEAP_INSERT(56, myStruct6).oid == 5);
+	assert(fib.FIB_HEAP_SIZE() == 6);
 	
-	assert(fib.FIB_HEAP_INSERT(1, myStruct7) == 6);
-	assert(fib.SIZE() == 7);
+	assert(fib.FIB_HEAP_INSERT(1, myStruct7).oid == 6);
+	assert(fib.FIB_HEAP_SIZE() == 7);
 
 	printf("Success!\n");
 };
+
 
 void TEST_GET_ID() {
 	Persona myStruct1{5, 'a'},
@@ -55,26 +56,25 @@ void TEST_GET_ID() {
 			myStruct4{10, 'd'},
 			myStruct5{-17, 'e'},
 			myStruct6{56, 'f'},
-			myStruct7{1, 'g'},
-			*result;
+			myStruct7{1, 'g'};
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
 	printf("%s", "[Test] GET_ID method: ");
-	fib.FIB_HEAP_INSERT(5, myStruct1);
-	fib.FIB_HEAP_INSERT(-18, myStruct2);
-	fib.FIB_HEAP_INSERT(8, myStruct3);
-	fib.FIB_HEAP_INSERT(10, myStruct4);
-	fib.FIB_HEAP_INSERT(-17, myStruct5);
-	fib.FIB_HEAP_INSERT(56, myStruct6);
-	fib.FIB_HEAP_INSERT(1, myStruct7);
+	NodeData<Persona> a = fib.FIB_HEAP_INSERT(5, myStruct1);
+	NodeData<Persona> b = fib.FIB_HEAP_INSERT(-18, myStruct2);
+	NodeData<Persona> c = fib.FIB_HEAP_INSERT(8, myStruct3);
+	NodeData<Persona> d = fib.FIB_HEAP_INSERT(10, myStruct4);
+	NodeData<Persona> e = fib.FIB_HEAP_INSERT(-17, myStruct5);
+	NodeData<Persona> f = fib.FIB_HEAP_INSERT(56, myStruct6);
+	NodeData<Persona> g = fib.FIB_HEAP_INSERT(1, myStruct7);
 
-	assert(fib.FIB_GET_ID(myStruct1) == 0);
-	assert(fib.FIB_GET_ID(myStruct2) == 1);
-	assert(fib.FIB_GET_ID(myStruct3) == 2);
-	assert(fib.FIB_GET_ID(myStruct4) == 3);
-	assert(fib.FIB_GET_ID(myStruct5) == 4);
-	assert(fib.FIB_GET_ID(myStruct6) == 5);
-	assert(fib.FIB_GET_ID(myStruct7) == 6);
+	assert(fib.FIB_GET_ID(a.address) == 0);
+	assert(fib.FIB_GET_ID(b.address) == 1);
+	assert(fib.FIB_GET_ID(c.address) == 2);
+	assert(fib.FIB_GET_ID(d.address) == 3);
+	assert(fib.FIB_GET_ID(e.address) == 4);
+	assert(fib.FIB_GET_ID(f.address) == 5);
+	assert(fib.FIB_GET_ID(g.address) == 6);
 
 	printf("Success!\n");
 };
@@ -86,18 +86,17 @@ void TEST_SIZE() {
 			myStruct4{10, 'd'},
 			myStruct5{-17, 'e'},
 			myStruct6{56, 'f'},
-			myStruct7{1, 'g'},
-			*result;
+			myStruct7{1, 'g'};
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
 	printf("%s", "[Test] SIZE method: ");
-	fib.FIB_HEAP_INSERT(5, myStruct1); 		assert(fib.SIZE() == 1);
-	fib.FIB_HEAP_INSERT(-18, myStruct2);   	assert(fib.SIZE() == 2);
-	fib.FIB_HEAP_INSERT(8, myStruct3);		assert(fib.SIZE() == 3);
-	fib.FIB_HEAP_INSERT(10, myStruct4);		assert(fib.SIZE() == 4);
-	fib.FIB_HEAP_INSERT(-17, myStruct5);	assert(fib.SIZE() == 5);
-	fib.FIB_HEAP_INSERT(56, myStruct6);		assert(fib.SIZE() == 6);
-	fib.FIB_HEAP_INSERT(1, myStruct7);		assert(fib.SIZE() == 7);
+	fib.FIB_HEAP_INSERT(5, myStruct1); 		assert(fib.FIB_HEAP_SIZE() == 1);
+	fib.FIB_HEAP_INSERT(-18, myStruct2);   	assert(fib.FIB_HEAP_SIZE() == 2);
+	fib.FIB_HEAP_INSERT(8, myStruct3);		assert(fib.FIB_HEAP_SIZE() == 3);
+	fib.FIB_HEAP_INSERT(10, myStruct4);		assert(fib.FIB_HEAP_SIZE() == 4);
+	fib.FIB_HEAP_INSERT(-17, myStruct5);	assert(fib.FIB_HEAP_SIZE() == 5);
+	fib.FIB_HEAP_INSERT(56, myStruct6);		assert(fib.FIB_HEAP_SIZE() == 6);
+	fib.FIB_HEAP_INSERT(1, myStruct7);		assert(fib.FIB_HEAP_SIZE() == 7);
 
 	printf("Success!\n");
 };
@@ -110,8 +109,7 @@ void TEST_ASK_MINIMUM() {
 			myStruct4{10, 'd'},
 			myStruct5{-17, 'e'},
 			myStruct6{56, 'f'},
-			myStruct7{1, 'g'},
-			*result;
+			myStruct7{1, 'g'};
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 	
 	printf("%s", "[Test] MINIMUM method: ");
@@ -184,8 +182,7 @@ void TEST_EXTRACT_MINIMUM() {
 void TEST_DECREASE_KEY() {
 	Persona myStruct1{1, 'a'},
 			myStruct2{2, 'b'},
-			myStruct3{3, 'c'},
-			result;
+			myStruct3{3, 'c'};
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
 	fib.FIB_HEAP_INSERT(-10, myStruct1);
@@ -208,7 +205,7 @@ void TEST_DELETE() {
 			result;
 	FibonacciHeap<Persona> fib = FibonacciHeap<Persona>();
 
-	printf("%s", "[Test] DELETE method: ");
+	printf("[Test] DELETE method: ");
 
 	fib.FIB_HEAP_INSERT(-10, myStruct1);
 	fib.FIB_HEAP_INSERT(1, myStruct2);
@@ -218,24 +215,74 @@ void TEST_DELETE() {
 
 	fib.FIB_HEAP_DELETE(2);
 
-	assert(fib.SIZE() == 2);
+	assert(fib.FIB_HEAP_SIZE() == 2);
 	assert(fib.FIB_HEAP_MINIMUM().id == 1);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 
 	assert(result.id == 1);
-	assert(fib.SIZE() == 1);
+	assert(fib.FIB_HEAP_SIZE() == 1);
 	assert(fib.FIB_HEAP_MINIMUM().id == 2);
 
 	result = fib.FIB_HEAP_EXTRACT_MIN();
 	assert(result.id == 2);
-	assert(fib.SIZE() == 0);
+	assert(fib.FIB_HEAP_SIZE() == 0);
 
 	printf("Success!\n");
 }
 
-void EXPENSIVE_TEST() {
+void recharge(FibonacciHeap<int>& Q, vector<int>& v) {
+	random_device rd;
+  	default_random_engine gen(rd());
+  	uniform_int_distribution<int> d(0, 10000);
+  	int size = v.size();
 
+  	Q.FIB_HEAP_CLEAR();
+
+  	assert(Q.FIB_HEAP_SIZE() == 0);
+	for (int i = 0; i < size; ++i) {
+		auto x = d(gen);
+		v[size-1-i] = x;
+		Q.FIB_HEAP_INSERT(x, x);
+		assert(Q.FIB_HEAP_SIZE() == i+1);
+	}
+
+	sort(v.begin(), v.end());
+}
+
+void EXPENSIVE_TEST() {
+	printf("[Expensive Test]: ");
+
+	FibonacciHeap<int> Q;
+	uint test_size = 500000;
+	vector<int> a(test_size, 0);
+	
+	recharge(Q, a);
+
+	for (uint i = 0; i < test_size; ++i) {
+		assert(a[i] == Q.FIB_HEAP_EXTRACT_MIN());
+		if(Q.FIB_HEAP_SIZE())
+			assert(a[i+1] == Q.FIB_HEAP_MINIMUM());
+	}
+
+
+	Q.FIB_HEAP_CLEAR();
+
+	for (int i = 0; i < test_size; ++i)
+		Q.FIB_HEAP_INSERT(i, ( test_size/15000 <= i && i < test_size/10000 ? 10: -10 ));
+
+	for (int i = test_size/15000; i < test_size/10000; ++i)
+		Q.FIB_HEAP_DECREASE_KEY(i, numeric_limits<int>::lowest());
+
+	for (int i = test_size/15000; i < test_size/10000; ++i)
+		assert(10 == Q.FIB_HEAP_EXTRACT_MIN());
+
+	for (int i = test_size/10000 - test_size/15000; i < test_size; ++i)
+		assert(-10 == Q.FIB_HEAP_EXTRACT_MIN());
+
+	assert(Q.FIB_HEAP_SIZE() == 0);
+
+	printf("Success!\n");
 }
 
 int main() {
