@@ -7,6 +7,7 @@
 #include "fibonacci-heap.h"
 
 using namespace std;
+using namespace Fibonacci_Heap;
 
 struct Persona {
 	int id;
