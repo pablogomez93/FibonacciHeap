@@ -13,6 +13,11 @@
 
 using namespace std;
 
+template<typename T> struct NodeData {
+	T* address;
+	int oid;
+};
+
 template<typename T> 
 struct Node {
 	int key;
@@ -32,14 +37,15 @@ class FibonacciHeap {
 	public:
 		//Operations for a mergeable heap:
 		FibonacciHeap();
-		int  FIB_HEAP_INSERT(int key, T& val);
+		NodeData<T>  FIB_HEAP_INSERT(int key, const T& val);
 		T&   FIB_HEAP_MINIMUM() const;
 		T&   FIB_HEAP_EXTRACT_MIN();
 		void FIB_HEAP_DECREASE_KEY(int, int);
 		void FIB_HEAP_DELETE(int);	
-		int  SIZE() const;
-		int  FIB_GET_ID(T&) const;	
+		int  FIB_HEAP_SIZE() const;
+		int  FIB_GET_ID(T*) const;	
 		bool FIB_HEAP_EMPTY() const;
+		void FIB_HEAP_CLEAR();
 
 	private:
 		int _n, _next_oid;
@@ -51,7 +57,6 @@ class FibonacciHeap {
 		void _link(Node<T>* y, Node<T>* x);
 		void _cut(Node<T>* x, Node<T>* y);
 		void _cascading_cut(Node<T>* y);
-
 };
 
 
@@ -72,8 +77,8 @@ bool FibonacciHeap<T>::FIB_HEAP_EMPTY() const {
 
 
 template<typename T>
-int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T& val) {
-	Node<T>* newGuest = new Node<T>{key, false, val, 0, node_list(), nullptr, _next_oid++};
+NodeData<T> FibonacciHeap<T>::FIB_HEAP_INSERT(int key, const T& val) {
+	Node<T>* newGuest = new Node<T>{key, false, *(new T(val)), 0, node_list(), nullptr, _next_oid++};
 
 	/**
 	 * Adding node to the roots list of the heap. 
@@ -96,7 +101,7 @@ int FibonacciHeap<T>::FIB_HEAP_INSERT(int key, T& val) {
 	 */
 	_n++;
 
-	return newGuest->oid;
+	return NodeData<T>{ &(newGuest->value) , newGuest->oid};
 }
 
 
@@ -253,14 +258,23 @@ void FibonacciHeap<T>::FIB_HEAP_DELETE(int node_id) {
 }
 
 template<typename T> 
-int FibonacciHeap<T>::SIZE() const {
+int FibonacciHeap<T>::FIB_HEAP_SIZE() const {
 	return _n;
 }
 
+template<typename T> 
+void FibonacciHeap<T>::FIB_HEAP_CLEAR() {
+	while(_n)
+		FIB_HEAP_EXTRACT_MIN();
+
+	_next_oid = 0;
+	_references.clear();
+}
+
 template<typename T>
-int FibonacciHeap<T>::FIB_GET_ID(T& ptr) const {
+int FibonacciHeap<T>::FIB_GET_ID(T* ptr) const {
 	for (int i = _references.size() - 1; i >= 0; i--)
-		if(&ptr == &((*(_references[i]))->value))
+		if(ptr == &((*(_references[i]))->value))
 			return (*(_references[i]))->oid;
 
 	return -1;
