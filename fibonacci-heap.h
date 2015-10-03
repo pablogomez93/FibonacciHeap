@@ -20,7 +20,7 @@ template<typename T> struct NodeData {
 
 template<typename T> 
 struct Node {
-	int key;
+	float key;
 	bool marked;
 	T& value;
 	int degree;
@@ -37,11 +37,11 @@ class FibonacciHeap {
 	public:
 		//Operations for a mergeable heap:
 		FibonacciHeap();
-		NodeData<T>  FIB_HEAP_INSERT(int key, const T& val);
+		NodeData<T>  FIB_HEAP_INSERT(float key, const T& val);
 		T&   FIB_HEAP_MINIMUM() const;
 		T&   FIB_HEAP_EXTRACT_MIN();
-		void FIB_HEAP_DECREASE_KEY(int, int);
-		void FIB_HEAP_DELETE(int);	
+		void FIB_HEAP_DECREASE_KEY(int nodeId, float key);
+		void FIB_HEAP_DELETE(int nodeId);	
 		int  FIB_HEAP_SIZE() const;
 		int  FIB_GET_ID(T*) const;	
 		bool FIB_HEAP_EMPTY() const;
@@ -77,7 +77,7 @@ bool FibonacciHeap<T>::FIB_HEAP_EMPTY() const {
 
 
 template<typename T>
-NodeData<T> FibonacciHeap<T>::FIB_HEAP_INSERT(int key, const T& val) {
+NodeData<T> FibonacciHeap<T>::FIB_HEAP_INSERT(float key, const T& val) {
 	Node<T>* newGuest = new Node<T>{key, false, *(new T(val)), 0, node_list(), nullptr, _next_oid++};
 
 	/**
@@ -214,10 +214,10 @@ void FibonacciHeap<T>::_link(Node<T>* y, Node<T>* x) {
 
 
 template<typename T> 
-void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, int k) {
+void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, float key) {
 	Node<T>* x = *(_references[node_id]);
 
-	x->key = k;
+	x->key = key;
 
 	if(x->parent != nullptr && x->key < x->parent->key) {
 		_cut(x, x->parent);
