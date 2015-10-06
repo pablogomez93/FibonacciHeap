@@ -268,6 +268,7 @@ void EXPENSIVE_TEST() {
 
 
 	Q.FIB_HEAP_CLEAR();
+	assert(Q.FIB_HEAP_SIZE() == 0);
 
 	for (int i = 0; i < test_size; ++i)
 		Q.FIB_HEAP_INSERT(i, ( test_size/15000 <= i && i < test_size/10000 ? 10: -10 ));
@@ -280,8 +281,69 @@ void EXPENSIVE_TEST() {
 
 	for (int i = test_size/10000 - test_size/15000; i < test_size; ++i)
 		assert(-10 == Q.FIB_HEAP_EXTRACT_MIN());
-
 	assert(Q.FIB_HEAP_SIZE() == 0);
+
+	//Q.FIB_HEAP_CLEAR();
+
+	assert(Q.FIB_HEAP_INSERT(0, 50).oid == test_size);
+	assert(Q.FIB_HEAP_INSERT(11, 2).oid == test_size+1);
+	assert(Q.FIB_HEAP_INSERT(10, 3).oid == test_size+2);
+	assert(Q.FIB_HEAP_INSERT(10, 4).oid == test_size+3);
+
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 50);
+
+	Q.FIB_HEAP_DECREASE_KEY(test_size+1, 1);
+
+	assert(Q.FIB_HEAP_MINIMUM() == 2);
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 2);
+	assert(Q.FIB_HEAP_MINIMUM() == 3 || Q.FIB_HEAP_MINIMUM() == 4); //Node x
+
+
+	//Q.FIB_HEAP_CLEAR();
+	assert(Q.FIB_HEAP_SIZE() == 2);
+
+	assert(Q.FIB_HEAP_INSERT(0, 1).oid == test_size+4); //Min
+	assert(Q.FIB_HEAP_INSERT(numeric_limits<float>::max(), 2).oid == test_size+5); //Node a
+	assert(Q.FIB_HEAP_INSERT(numeric_limits<float>::max(), 30).oid == test_size+6); //Node b
+	assert(Q.FIB_HEAP_INSERT(numeric_limits<float>::max(), 4).oid == test_size+7); //Node c
+
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 1);
+
+	assert(Q.FIB_HEAP_SIZE() == 5);
+
+	auto min = Q.FIB_HEAP_EXTRACT_MIN();
+	assert(min == 3 || min == 4);
+
+	assert(Q.FIB_HEAP_SIZE() == 4); //a(key max), b(key max), c(key max), x(key 10)
+
+	//Min 3 ó 4 y despues estan los otros 3
+	Q.FIB_HEAP_DECREASE_KEY(test_size+5, 3338);
+	Q.FIB_HEAP_DECREASE_KEY(test_size+6, 430); //key = 430, value = 30
+	Q.FIB_HEAP_DECREASE_KEY(test_size+7, 4277);
+
+	assert((min == 3 && Q.FIB_HEAP_MINIMUM() == 4)  ||  (min == 4 && Q.FIB_HEAP_MINIMUM() == 3));
+
+	assert(Q.FIB_HEAP_SIZE() == 4);
+
+	auto minBis = Q.FIB_HEAP_EXTRACT_MIN();
+	assert((min == 3 && minBis == 4)  ||  (min == 4 && minBis == 3));
+
+	assert(Q.FIB_HEAP_INSERT(1, 2).oid == test_size+8);
+	assert(Q.FIB_HEAP_INSERT(600, 3).oid == test_size+9);
+	assert(Q.FIB_HEAP_INSERT(600, 4).oid == test_size+10); 
+	assert(Q.FIB_HEAP_INSERT(0, 100).oid == test_size+11);
+	assert(Q.FIB_HEAP_INSERT(500, 2).oid == test_size+12);
+	assert(Q.FIB_HEAP_INSERT(500, 33).oid == test_size+13);
+	assert(Q.FIB_HEAP_INSERT(500, 4).oid == test_size+14);
+
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 100);
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 2);
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 30);
+
+	// //Min 3 ó 4 y despues estan los otros 3
+	Q.FIB_HEAP_DECREASE_KEY(test_size+13, 435);
+
+	assert(Q.FIB_HEAP_EXTRACT_MIN() == 33);
 
 	printf("Success!\n");
 }

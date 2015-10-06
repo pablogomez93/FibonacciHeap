@@ -3,6 +3,7 @@
 
 #include <limits>
 #include <vector>
+#include <algorithm>
 #include <stdexcept>
 #include "circular_doubly_linked_list/circular_doubly_linked_list.h"
 
@@ -10,6 +11,8 @@
  * This fibonacci heap implementation requires a std of c++11 to compile well.
  * If you use the Makefile attached, it will do it for you :).
  */
+
+#define LOWER_INF numeric_limits<float>::lowest()
 
 using namespace std;
 
@@ -26,7 +29,7 @@ namespace Fibonacci_Heap {
 		T& value;
 		int degree;
 		CircularLinkedList<Node<T>*> children;
-		Node* parent;
+		Node<T>* parent;
 		int oid;
 	};
 
@@ -123,7 +126,7 @@ namespace Fibonacci_Heap {
 		 * Applying all children of the smallest node as roots of the heap
 		 * cleaning its parent (it becomes null).
 		 */
-		for (typename node_list::iterator it = (*_min)->children.begin(); it != (*_min)->children.end(); ++it) {
+		for (auto it = (*_min)->children.begin(); it != (*_min)->children.end(); ++it) {
 			(*it)->parent = nullptr;
 			_roots.push_back(*it);
 
@@ -146,102 +149,101 @@ namespace Fibonacci_Heap {
 		return backup_min;
 	}
 
+
 	template<typename T> 
 	void FibonacciHeap<T>::_consolidate() {
-
+		int i;
 		vector<Node<T>*> roots_sort_by_degree;
 		roots_sort_by_degree.reserve(log2(_n));
 
-		for (int i = 0; i < log2(_n); i++)
-			roots_sort_by_degree.push_back(nullptr);
+		for (i = 0; i <= log2(_n); i++)
+				roots_sort_by_degree.push_back(nullptr);
 
-	    for (int i = _roots.size(); i > 0; i--) {
-	    	Node<T>* x  = (*_rightNode);
-	    	_rightNode = _roots.right(_rightNode);
+	    for (i = _roots.size(); i > 0; i--) {
+		    	auto x  = (*_rightNode);
+				_rightNode = _roots.right(_rightNode);
 
-			int d = x->degree;
-			while(roots_sort_by_degree[d] != nullptr) {
-				Node<T>* y = roots_sort_by_degree[d];
+				int d = x->degree;
+				while(roots_sort_by_degree[d] != nullptr) {
+						auto y = roots_sort_by_degree[d];
 
-				if(x->key > y->key)
-					_swap(&x, &y);
+						if(x->key > y->key)
+							_swap(&x, &y);
 
-				_link(y, x);
-				roots_sort_by_degree[d] = nullptr;
-				d++;
-			}
+						_link(y, x);
+						roots_sort_by_degree[d] = nullptr;
+						d++;
+				}
 
-			roots_sort_by_degree[d] = x;
+				roots_sort_by_degree[d] = x;
 	    }
 
-	    _min = _roots.end();
+	    for (i = 0; i < roots_sort_by_degree.size(); i++)
+		    	if(roots_sort_by_degree[i] != nullptr) {
+		    		if(_min == _roots.end())	
+		    			_roots.clear();
 
-	    for (int i = 0; i < roots_sort_by_degree.size(); i++)
-	    	if(roots_sort_by_degree[i] != nullptr) {
-	    		if(_min == _roots.end())	
-	    			_roots.clear();
+		    		_roots.push_back(roots_sort_by_degree[i]);
+		    		_references[roots_sort_by_degree[i]->oid] = (--(_roots.end()));
 
-	    		_roots.push_back(roots_sort_by_degree[i]);
-
-	    		if(_min == _roots.end() || roots_sort_by_degree[i]->key < (*_min)->key)
-	    			_min = --(_roots.end());
-
-	    	}
-
+		    		if(_min == _roots.end() || roots_sort_by_degree[i]->key < (*_min)->key)
+		    			_min = --(_roots.end());
+		    	}
 	}
 
-	template<typename T> 
-	void FibonacciHeap<T>::_swap(Node<T>** x, Node<T>** y) {
-		typename node_list::iterator temp_iterator = _references[(*x)->oid];
-		_references[(*x)->oid] = _references[(*y)->oid];
-		_references[(*y)->oid] = temp_iterator;
-
-		Node<T>* temp = *x;
-		*x = *y;
-		*y = temp;
-	}
 
 	template<typename T> 
 	void FibonacciHeap<T>::_link(Node<T>* y, Node<T>* x) {
 		x->children.push_back(y);
 		x->degree++;
 		y->marked = false;
-
+		y->parent = *(_references[x->oid]);
+		
 		_roots.erase(_references[y->oid]);
-
 		_references[y->oid] = --((x->children).end());
 	}
 
 
 	template<typename T> 
+	void FibonacciHeap<T>::_swap(Node<T>** x, Node<T>** y) {
+		auto temp = *x;
+		*x = *y;
+		*y = temp;
+	}
+
+
+	template<typename T> 
 	void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, float key) {
-		Node<T>* x = *(_references[node_id]);
+		auto x = *(_references[node_id]);
 
 		x->key = key;
+		auto p = x->parent;
 
-		if(x->parent != nullptr && x->key < x->parent->key) {
-			_cut(x, x->parent);
-			_cascading_cut(x->parent);
+		if(p != nullptr && x->key < p->key) {
+			_cut(x, p);
+			_cascading_cut(p);
 		}
 
 		if(x->key < (*_min)->key) 
 			_min = _references[node_id];
 	}
 
+
 	template<typename T> 
 	void FibonacciHeap<T>::_cut(Node<T>* x, Node<T>* y) {
 		y->children.erase(_references[x->oid]);
+		y->degree--;
 		x->parent = nullptr;
 		x->marked = false;
 
 		_roots.push_back(x);
-
 		_references[x->oid] = --(_roots.end());
 	}
 
+
 	template<typename T> 
 	void FibonacciHeap<T>::_cascading_cut(Node<T>* y) {
-		Node<T>* z = y->parent;
+		auto z = y->parent;
 		if(z != nullptr)
 			if(!y->marked) {
 				y->marked = true;
@@ -251,16 +253,19 @@ namespace Fibonacci_Heap {
 			}
 	}
 
+
 	template<typename T> 
 	void FibonacciHeap<T>::FIB_HEAP_DELETE(int node_id) {
-		FIB_HEAP_DECREASE_KEY(node_id, numeric_limits<int>::lowest());
+		FIB_HEAP_DECREASE_KEY(node_id, LOWER_INF);
 		FIB_HEAP_EXTRACT_MIN();
 	}
 
-	template<typename T> 
+
+	template<typename T>
 	int FibonacciHeap<T>::FIB_HEAP_SIZE() const {
 		return _n;
 	}
+
 
 	template<typename T> 
 	void FibonacciHeap<T>::FIB_HEAP_CLEAR() {
@@ -271,6 +276,7 @@ namespace Fibonacci_Heap {
 		_references.clear();
 	}
 
+
 	template<typename T>
 	int FibonacciHeap<T>::FIB_GET_ID(T* ptr) const {
 		for (int i = _references.size() - 1; i >= 0; i--)
@@ -279,6 +285,8 @@ namespace Fibonacci_Heap {
 
 		return -1;
 	}
+
+	
 }
 
 #endif //FIBHEAP_H
