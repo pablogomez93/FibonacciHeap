@@ -41,15 +41,15 @@ namespace Fibonacci_Heap {
 		public:
 			//Operations for a mergeable heap:
 			FibonacciHeap();
-			NodeData<T>  FIB_HEAP_INSERT(float key, const T& val);
-			T&   FIB_HEAP_MINIMUM() const;
-			T&   FIB_HEAP_EXTRACT_MIN();
-			void FIB_HEAP_DECREASE_KEY(int nodeId, float key);
-			void FIB_HEAP_DELETE(int nodeId);	
-			int  FIB_HEAP_SIZE() const;
-			int  FIB_GET_ID(T*) const;	
-			bool FIB_HEAP_EMPTY() const;
-			void FIB_HEAP_CLEAR();
+			NodeData<T> insert(float key, const T& val);
+			T& minimum() const;
+			T& extract_min();
+			void node_up(int nodeId, float key);
+			void delete_node(int nodeId);	
+			int  size() const;
+			int  get_id(T*) const;	
+			bool empty() const;
+			void clear();
 
 		private:
 			int _n, _next_oid;
@@ -74,13 +74,13 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T> 
-	bool FibonacciHeap<T>::FIB_HEAP_EMPTY() const {
+	bool FibonacciHeap<T>::empty() const {
 		return !_n;
 	}
 
 
 	template<typename T>
-	NodeData<T> FibonacciHeap<T>::FIB_HEAP_INSERT(float key, const T& val) {
+	NodeData<T> FibonacciHeap<T>::insert(float key, const T& val) {
 		Node<T>* newGuest = new Node<T>{key, false, *(new T(val)), 0, node_list(), nullptr, _next_oid++};
 
 		/**
@@ -109,7 +109,7 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T> 
-	T& FibonacciHeap<T>::FIB_HEAP_MINIMUM() const {
+	T& FibonacciHeap<T>::minimum() const {
 		if(_n < 1)	throw runtime_error("Heap empty. There is no minimum!");
 
 		return (*_min)->value;
@@ -117,7 +117,7 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T> 
-	T& FibonacciHeap<T>::FIB_HEAP_EXTRACT_MIN() {
+	T& FibonacciHeap<T>::extract_min() {
 		if(_n < 1)	throw runtime_error("Heap empty. There is no minimum to extract!");
 
 		T& backup_min = (*_min)->value;
@@ -213,7 +213,7 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T> 
-	void FibonacciHeap<T>::FIB_HEAP_DECREASE_KEY(int node_id, float key) {
+	void FibonacciHeap<T>::node_up(int node_id, float key) {
 		auto x = *(_references[node_id]);
 
 		x->key = key;
@@ -255,22 +255,22 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T> 
-	void FibonacciHeap<T>::FIB_HEAP_DELETE(int node_id) {
-		FIB_HEAP_DECREASE_KEY(node_id, LOWER_INF);
-		FIB_HEAP_EXTRACT_MIN();
+	void FibonacciHeap<T>::delete_node(int node_id) {
+		node_up(node_id, LOWER_INF);
+		extract_min();
 	}
 
 
 	template<typename T>
-	int FibonacciHeap<T>::FIB_HEAP_SIZE() const {
+	int FibonacciHeap<T>::size() const {
 		return _n;
 	}
 
 
 	template<typename T> 
-	void FibonacciHeap<T>::FIB_HEAP_CLEAR() {
+	void FibonacciHeap<T>::clear() {
 		while(_n)
-			FIB_HEAP_EXTRACT_MIN();
+			extract_min();
 
 		_next_oid = 0;
 		_references.clear();
@@ -278,7 +278,7 @@ namespace Fibonacci_Heap {
 
 
 	template<typename T>
-	int FibonacciHeap<T>::FIB_GET_ID(T* ptr) const {
+	int FibonacciHeap<T>::get_id(T* ptr) const {
 		for (int i = _references.size() - 1; i >= 0; i--)
 			if(ptr == &((*(_references[i]))->value))
 				return (*(_references[i]))->oid;
